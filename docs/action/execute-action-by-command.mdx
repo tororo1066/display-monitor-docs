@@ -1,0 +1,34 @@
+---
+sidebar_position: 6
+---
+
+# コマンドでActionを実行する
+基本的には、コマンドでActionを実行します
+```
+<>は省略不可、[]は省略可能
+/dmonitor runLoaded <Workspace名> <Action名> [Caster(実行者)] [Target(ターゲット)] [位置] [パラメータ]
+```
+Caster、Target、位置を省略するとコマンドの実行者のものになります\
+コンソールから実行した状態で省略すると中身は空になります\
+位置は、
+```
+"<x>,<y>,<z>"
+"<world>,<x>,<y>,<z>"
+"<world>,<x>,<y>,<z>,<yaw>,<pitch>"
+```
+のように指定します
+
+パラメータは、
+```
+"{\"<パラメータ名>\":\"<値>\",\"<パラメータ名2>\":\"<値2>\"}"
+```
+のように指定します
+
+## 例
+```
+/dmonitor runLoaded DisplayMonitor testAction @s @s "world,0,0,0" "{\"text\":\"Hello!\"}"
+```
+このコマンドは、`DisplayMonitor`というWorkspaceの`testAction`を実行します\
+`@s`はコマンドの実行者を表しています\
+`"world,0,0,0"`で位置を指定しています\
+`"{\"text\":\"Hello!\"}"`でパラメータを指定しています\

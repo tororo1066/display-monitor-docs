@@ -1,0 +1,52 @@
+---
+sidebar_position: 2
+---
+
+# Elementのテンプレートを作る
+Elementのテンプレートを作ることで、Elementを簡単に作成することができます
+
+`plugins/DisplayMonitor/elements/`に`template.yml`を作成します\
+以下のように記入します
+
+```yaml title="template.yml"
+template:
+  type: "TextElement"
+  text: "Hello!"
+  onInteract:
+    - class: End
+```
+
+`SummonElement`と違い、パラメータを`parameters`内に記述する必要がありません\
+作成した後は`/dmonitor reload`で読み込んでください
+
+## 召喚
+作成したテンプレートはActionで召喚することできます
+
+```yaml title="summon_template.yml"
+summon_template:
+  actions:
+    - class: SummonElement
+      name: "test_element" #Elementの名前
+//lime-start
+      preset: "template" #テンプレートの名前
+//lime-end
+```
+これだけで召喚できます 簡単ですね
+
+:::warning
+`preset`を使用しない場合、必ず`type`を指定してください
+:::
+\
+もし一部のパラメータを変更したい場合は、`parameters`に変更したいパラメータを指定してください
+
+```yaml title="summon_template.yml"
+summon_template:
+  actions:
+    - class: SummonElement
+      name: "test_element"
+      preset: "template"
+//lime-start
+      parameters:
+        text: "Hello, World!"
+//lime-end
+```

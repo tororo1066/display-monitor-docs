@@ -1,0 +1,89 @@
+---
+sidebar_position: 4
+---
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+# Workspaceを追加する
+独自にWorkspaceを追加することで、Actionの管理を厳格化したり、他の拡張プラグインと干渉しないようにすることができます
+
+クラスを作成します
+<Tabs>
+    <TabItem value="java" label="Java">
+```java title="MyWorkspace.java"
+import tororo1066.displaymonitorapi.workspace.IAbstractWorkspace;
+
+public class MyWorkspace implements IAbstractWorkspace {
+
+    Map<String, IActionConfiguration> actionConfigurations = new HashMap<>();
+
+    @Override
+    public @NotNull String getName() {
+        return "MyWorkspace";
+    }
+
+    @Override
+    @NotNull Map<@NotNull String, @NotNull IActionConfiguration> getActionConfigurations() {
+        return actionConfigurations;
+    }
+}
+```
+    </TabItem>
+    <TabItem value="kotlin" label="Kotlin">
+```kotlin title="MyWorkspace.kt"
+import tororo1066.displaymonitorapi.workspace.IAbstractWorkspace
+
+class MyWorkspace : IAbstractWorkspace {
+
+    val actionConfigurations = mutableMapOf<String, IActionConfiguration>()
+
+    override fun getName(): String {
+        return "MyWorkspace"
+    }
+
+    override fun getActionConfigurations(): Map<String, IActionConfiguration> {
+        return actionConfigurations
+    }
+}
+```
+    </TabItem>
+</Tabs>
+
+## 登録
+`WorkspaceStorage`に登録します\
+プラグインの起動時に登録してください
+
+<Tabs>
+    <TabItem value="java" label="Java">
+```java title="Main.java"
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
+import tororo1066.displaymonitorapi.IDisplayMonitor;
+
+public class Main extends JavaPlugin {
+
+    @Override
+    public void onEnable() {
+        IDisplayMonitor displayMonitor = IDisplayMonitor.DisplayMonitorInstance.getInstance();
+        displayMonitor.workspaceStorage.registerWorkspace(new MyWorkspace());
+    }
+}
+```
+    </TabItem>
+    <TabItem value="kotlin" label="Kotlin">
+```kotlin title="Main.kt"
+import org.bukkit.Bukkit
+import org.bukkit.plugin.java.JavaPlugin
+import tororo1066.displaymonitorapi.IDisplayMonitor
+
+class Main : JavaPlugin() {
+
+    override fun onEnable() {
+        val displayMonitor = IDisplayMonitor.DisplayMonitorInstance.getInstance()
+        displayMonitor.workspaceStorage.registerWorkspace(MyWorkspace())
+    }
+}
+```
+    </TabItem>
+</Tabs>

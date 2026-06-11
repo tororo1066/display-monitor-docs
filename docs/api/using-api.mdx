@@ -1,0 +1,101 @@
+---
+sidebar_position: 1
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# APIを使う
+APIを使うことで、独自のActionやElementのタイプなどを追加することができます
+
+## 依存関係
+
+予め、Githubのユーザー名とトークンを環境変数に登録する必要があります\
+トークンは[ここ](https://github.com/settings/tokens)から、\
+`Generate new token`から`Generate new token (classic)`を選択し、\
+`read:packages`にチェックを入れてトークンを生成してください
+
+環境変数にユーザー名を`GITHUB_USERNAME`、トークンを`GITHUB_TOKEN`として登録してください\
+登録方法は各OSの環境変数の設定方法を参照してください
+
+\
+APIのみかPlugin全体を依存関係に追加することができます\
+Versionは[ここ](https://github.com/tororo1066?tab=packages&repo_name=DisplayMonitor)から確認してください
+
+<Tabs>
+    <TabItem value="xml" label="Maven">
+```xml title="pom.xml"
+<repositories>
+    <repository>
+        <id>github</id>
+        <url>https://maven.pkg.github.com/tororo1066/DisplayMonitor</url>
+        <snapshots>
+            <enabled>true</enabled>
+        </snapshots>
+        <releases>
+            <enabled>true</enabled>
+        </releases>
+    </repository>
+</repositories>
+
+<dependencies>
+    <dependency>
+        <groupId>tororo1066</groupId>
+        <artifactId>display-monitor-api</artifactId> {/* pluginを使う場合はdisplay-monitor-plugin */}
+        <version>VERSION</version>
+    </dependency>
+</dependencies>
+```
+
+```xml title="settings.xml"
+<settings>
+    <servers>
+        <server>
+            <id>github</id>
+            <username>${env.GITHUB_USERNAME}</username>
+            <password>${env.GITHUB_TOKEN}</password>
+        </server>
+    </servers>
+</settings>
+```
+    </TabItem>
+
+    <TabItem value="gradle" label="Gradle">
+```gradle title="build.gradle"
+repositories {
+    maven {
+        name = "GitHubPackages"
+        url = uri("https://maven.pkg.github.com/tororo1066/DisplayMonitor")
+        credentials {
+            username = System.getenv("GITHUB_USERNAME")
+            password = System.getenv("GITHUB_TOKEN")
+        }
+    }
+}
+
+dependencies {
+    compileOnly 'tororo1066:display-monitor-api:VERSION' // pluginを使う場合はdisplay-monitor-plugin
+}
+```
+    </TabItem>
+
+    <TabItem value="kotlin-dsl" label="Kotlin DSL">
+```gradle title="build.gradle.kts"
+repositories {
+    maven {
+        name = "GitHubPackages"
+        url = uri("https://maven.pkg.github.com/tororo1066/DisplayMonitor")
+        credentials {
+            username = System.getenv("GITHUB_USERNAME")
+            password = System.getenv("GITHUB_TOKEN")
+        }
+    }
+}
+
+dependencies {
+    compileOnly("tororo1066:display-monitor-api:VERSION") // pluginを使う場合はdisplay-monitor-plugin
+}
+```
+    </TabItem>
+</Tabs>
+

@@ -1,0 +1,220 @@
+---
+sidebar_position: 3
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+# Elementを追加する
+独自のElementを追加できます
+
+クラスを作成します
+<Tabs>
+    <TabItem value="Java" label="Java">
+```java
+import org.bukkit.Location;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Zombie;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import tororo1066.displaymonitorapi.elements.IAbstractElement;
+import tororo1066.displaymonitorapi.elements.Settable;
+
+import java.util.UUID;
+
+public class ZombieElement implements IAbstractElement {
+
+    IActionContext actionContext;
+
+    Zombie zombie;
+
+    @Settable //Settableをつけるとprepareでconfigから値を取得できる
+    public String customName = "Zombie";
+
+    //trueだとGroupElementが動くときに何もしない
+    @Override
+    public boolean syncGroup() {
+        return true;
+    }
+
+    @Override
+    public @Nullable IActionContext getActionContext() {
+        return actionContext;
+    }
+
+    @Override
+    public void setActionContext(@Nullable IActionContext actionContext) {
+        this.actionContext = actionContext;
+    }
+
+
+    //召喚時に呼び出される
+    //entityはアクションを実行しているEntity
+    @Override
+    public void spawn(@Nullable Entity entity, @NotNull Location location) {
+        zombie = location.getWorld().spawn(location, Zombie.class, zombie -> {
+            zombie.setCustomName(customName);
+        });
+    }
+
+    //削除時に呼び出される
+    @Override
+    public void remove() {
+        zombie.remove();
+    }
+
+    //1tickごとに呼び出される
+    @Override
+    public void tick(@Nullable Entity entity) {
+
+    }
+
+    //使わないなら何もしない 使うならspawn時にこの関数を呼び出す
+    @Override
+    public void startTick(@Nullable Entity entity) {
+        //Bukkit.getScheduler().runTaskTimer(plugin, () -> {
+        //    tick(entity);
+        //}, 0, 1);
+    }
+
+    //使わないなら何もしない 使うならremove時にこの関数を呼び出す
+    @Override
+    public void stopTick() {
+
+    }
+
+    //別のエンティティに繋げる
+    @Override
+    public void attachEntity(@NotNull Entity entity) {
+        entity.addPassenger(zombie);
+    }
+
+    //エンティティを移動させる
+    @Override
+    public void move(@NotNull Location location) {
+        zombie.teleport(location);
+    }
+
+    //prepareで更新された値を適用する
+    @Override
+    public void applyChanges() {
+        zombie.setCustomName(customName);
+    }
+
+    @Override
+    public @NotNull IAbstractElement clone() {
+        ZombieElement element = new ZombieElement();
+        element.actionContext = actionContext;
+        element.customName = customName;
+        return element;
+    }
+}
+```
+    </TabItem>
+    <TabItem value="Kotlin" label="Kotlin">
+```kotlin
+import org.bukkit.Location
+import org.bukkit.entity.Entity
+import org.bukkit.entity.Zombie
+import tororo1066.displaymonitorapi.elements.IAbstractElement
+import tororo1066.displaymonitorapi.elements.IActionContext
+import tororo1066.displaymonitorapi.elements.Settable
+
+class ZombieElement : IAbstractElement {
+    private var actionContext: IActionContext? = null
+
+    private var zombie: Zombie? = null
+
+    @Settable
+    var customName = "Zombie"
+
+    override fun syncGroup(): Boolean {
+        return true
+    }
+
+    override fun getActionContext(): IActionContext? {
+        return actionContext
+    }
+
+    override fun setActionContext(actionContext: IActionContext?) {
+        this.actionContext = actionContext
+    }
+
+    override fun spawn(entity: Entity?, location: Location) {
+        zombie = location.world.spawn(location, Zombie::class.java) {
+            it.customName = customName
+        }
+    }
+
+    override fun remove() {
+        zombie?.remove()
+    }
+
+    override fun tick(entity: Entity?) {}
+
+    override fun startTick(entity: Entity?) {}
+
+    override fun stopTick() {}
+
+    override fun attachEntity(entity: Entity) {
+        entity.addPassenger(zombie)
+    }
+
+    override fun move(location: Location) {
+        zombie?.teleport(location)
+    }
+
+    override fun applyChanges() {
+        zombie?.customName = customName
+    }
+
+    override fun clone(): IAbstractElement {
+        val element = ZombieElement()
+        element.actionContext = actionContext
+        element.customName = customName
+        return element
+    }
+}
+```
+    </TabItem>
+</Tabs>
+
+## 登録
+`ElementStorage`に登録します\
+プラグインの起動時に登録してください
+
+<Tabs>
+    <TabItem value="java" label="Java">
+```java title="Main.java"
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
+import tororo1066.displaymonitorapi.IDisplayMonitor;
+
+public class Main extends JavaPlugin {
+
+    @Override
+    public void onEnable() {
+        IDisplayMonitor displayMonitor = IDisplayMonitor.DisplayMonitorInstance.getInstance();
+        displayMonitor.elementStorage.registerElement("ZombieElement", ZombieElement.class);
+    }
+}
+```
+    </TabItem>
+    <TabItem value="kotlin" label="Kotlin">
+```kotlin title="Main.kt"
+import org.bukkit.Bukkit
+import org.bukkit.plugin.java.JavaPlugin
+import tororo1066.displaymonitorapi.IDisplayMonitor
+
+class Main : JavaPlugin() {
+
+    override fun onEnable() {
+        val displayMonitor = IDisplayMonitor.DisplayMonitorInstance.getInstance()
+        displayMonitor.elementStorage.registerElement("ZombieElement", ZombieElement::class.java)
+    }
+}
+```
+    </TabItem>
+
+</Tabs>

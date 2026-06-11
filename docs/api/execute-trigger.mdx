@@ -1,0 +1,71 @@
+---
+sidebar_position: 5
+---
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+# Triggerを実行する
+プラグインからTriggerを実行することができます
+
+## 使い方
+<Tabs>
+    <TabItem value="Java" label="Java">
+```java
+import tororo1066.displaymonitorapi.IDisplayMonitor;
+import tororo1066.displaymonitorapi.actions.IActionContext;
+import tororo1066.displaymonitorapi.workspace.IAbstractWorkspace;
+
+public void executeTrigger() {
+    IDisplayMonitor displayMonitor = IDisplayMonitor.DisplayMonitorInstance.getInstance();
+
+    IAbstractWorkspace workspace = displayMonitor.getWorkspaceStorage().getWorkspace("DisplayMonitor");
+
+    IActionContext context = displayMonitor.getActionStorage().createActionContext(
+        displayMonitor.getActionStorage().createPublicContext()
+    );
+    context.setCaster(...);
+    context.setTarget(...);
+    displayMonitor.getActionStorage().trigger(
+        workspace,
+        "triggerName",
+        context,
+        (section) -> "hello".equals(section.getString("greeting")) //条件
+    );
+}
+```
+    </TabItem>
+    <TabItem value="Kotlin" label="Kotlin">
+```kotlin
+import tororo1066.displaymonitorapi.IDisplayMonitor
+
+fun executeTrigger() {
+    val displayMonitor = IDisplayMonitor.DisplayMonitorInstance.getInstance()
+
+    val workspace = displayMonitor.workspaceStorage.getWorkspace("DisplayMonitor")
+
+    val context = displayMonitor.actionStorage.createActionContext(
+        displayMonitor.actionStorage.createPublicContext()
+    )
+    context.caster = ...
+    context.target = ...
+    displayMonitor.actionStorage.trigger(
+        workspace,
+        "triggerName",
+        context
+    ) { section -> "hello" == section.getString("greeting") } //条件
+}
+```
+    </TabItem>
+</Tabs>
+
+\
+これで、以下のようなActionを実行できます
+```yaml title="action.yml"
+action:
+  triggers:
+    - trigger: triggerName
+      greeting: "hello"
+  actions:
+    - class: Message
+      message: "Hello!"
+```

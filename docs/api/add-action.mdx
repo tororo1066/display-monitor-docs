@@ -1,0 +1,122 @@
+---
+sidebar_position: 2
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+# Actionを追加する
+独自のActionを追加できます
+
+クラスを作成します
+<Tabs>
+    <TabItem value="java" label="Java">
+```java title="PlaySoundAction.java"
+import org.bukkit.Location;
+import org.bukkit.entity.Entity;
+import org.jetbrains.annotations.NotNull;
+import tororo1066.displaymonitorapi.configuration.IAdvancedConfigurationSection;
+
+public class PlaySoundAction implements IAbstractAction {
+
+    private String soundName;
+    private float volume;
+    private float pitch;
+
+    // Actionを実行する
+    @Override
+    public @NotNull ActionResult run(@NotNull IActionContext context) {
+
+        Entity caster = context.getCaster();
+        if (caster == null) return ActionResult.failed("caster required");
+        Location location = context.getLocation();
+        if (location == null) return ActionResult.failed("location required");
+
+        caster.getWorld().playSound(location, soundName, volume, pitch);
+
+        return ActionResult.success();
+    }
+
+    // 設定を読み込む
+    @Override
+    public void prepare(@NotNull IAdvancedConfigurationSection configuration) {
+        soundName = configuration.getString("soundName", "block.note_block.harp");
+        volume = Double.valueOf(configuration.getDouble("volume", 1)).floatValue();
+        pitch = Double.valueOf(configuration.getDouble("pitch", 1)).floatValue();
+    }
+}
+
+```
+    </TabItem>
+    <TabItem value="kotlin" label="Kotlin">
+```kotlin title="PlaySoundAction.kt"
+import org.bukkit.Location
+import org.bukkit.entity.Entity
+import tororo1066.displaymonitorapi.configuration.IAdvancedConfigurationSection
+
+class PlaySoundAction : IAbstractAction {
+
+    lateinit var soundName: String
+    private var volume = 0f
+    private var pitch = 0f
+
+    // Actionを実行する
+    override fun run(context: IActionContext): ActionResult {
+        val caster = context.caster ?: return ActionResult.failed("caster required")
+        val location = context.location ?: return ActionResult.failed("location required")
+
+        caster.world.playSound(location, soundName, volume, pitch)
+
+        return ActionResult.success()
+    }
+
+    // 設定を読み込む
+    override fun prepare(configuration: IAdvancedConfigurationSection) {
+        soundName = configuration.getString("soundName", "block.note_block.harp")
+        volume = configuration.getDouble("volume", 1.0).toFloat()
+        pitch = configuration.getDouble("pitch", 1.0).toFloat()
+    }
+}
+```
+    </TabItem>
+</Tabs>
+
+## 登録
+`ActionStorage`に登録します\
+プラグインの起動時に登録してください
+
+<Tabs>
+    <TabItem value="java" label="Java">
+```java title="Main.java"
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
+import tororo1066.displaymonitorapi.IDisplayMonitor;
+
+public class Main extends JavaPlugin {
+
+    @Override
+    public void onEnable() {
+        IDisplayMonitor displayMonitor = IDisplayMonitor.DisplayMonitorInstance.getInstance();
+        displayMonitor.actionStorage.registerAction("PlaySound", PlaySoundAction.class);
+    }
+}
+```
+    </TabItem>
+    <TabItem value="kotlin" label="Kotlin">
+```kotlin title="Main.kt"
+import org.bukkit.Bukkit
+import org.bukkit.plugin.java.JavaPlugin
+import tororo1066.displaymonitorapi.IDisplayMonitor
+
+class Main : JavaPlugin() {
+
+    override fun onEnable() {
+        val displayMonitor = IDisplayMonitor.DisplayMonitorInstance.getInstance()
+        displayMonitor.actionStorage.registerAction("PlaySound", PlaySoundAction::class.java)
+    }
+}
+```
+    </TabItem>
+
+</Tabs>

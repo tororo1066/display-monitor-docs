@@ -1,0 +1,39 @@
+---
+sidebar_position: 3
+---
+
+# Workspaceを使う
+普段のActionはWorkspace内で実行されています\
+Workspaceには読み込まれたActionが保存されています\
+Workspaceは他の拡張プラグインなどで提供されることが一般的です\
+DisplayMonitorでは`DisplayMonitor`というWorkspaceが提供されています
+
+例えば...
+```yaml title="DisplayMonitor/actions/test.yml"
+testAction:
+  actions:
+    - class: Message
+      message: "§aHello!"
+```
+`testAction`という名前のActionがあるとき、
+```yaml title="AnotherPlugin/actions/test.yml"
+testAction:
+  actions:
+    - class: Message
+      message: "§dHello!"
+```
+他のWorkspaceで同じ名前のActionがあっても干渉しません\
+これにより、柔軟なActionの作成が可能になります
+
+## SetWorkspace
+`SetWorkspace`はWorkspaceを切り替えるActionです
+```yaml title="set_workspace.yml"
+set_workspace:
+  actions:
+    - class: SetWorkspace
+      workspace: "AnotherPluginWorkspace" # 切り替えるWorkspaceの名前
+    - class: RunAction
+      action: "testAction" # 切り替えたWorkspaceのActionを実行
+```
+これにより、他のWorkspaceに切り替え、\
+`§dHello!`と表示されます(実際のWorkspace名は異なります)

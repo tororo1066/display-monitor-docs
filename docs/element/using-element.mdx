@@ -1,0 +1,54 @@
+---
+sidebar_position: 1
+---
+
+# Elementを使う
+Elementを使うことで何かを表示出来たり、プレイヤーにインタラクトさせることができるようになります
+
+Elementは[SummonElement](../../reference#Action/SummonElement)で召喚することができます
+
+## 使い方
+```yaml title="summon_element.yml"
+summon_element:
+  actions:
+    - class: SummonElement
+      type: "TextElement"
+      name: "test_element"
+      parameters:
+        text: "Hello!"
+        onInteract:
+          - class: End
+```
+
+### 説明
+`type`には召喚するElementの種類を指定します\
+Elementの種類は[ここ](../../reference#Element)で確認できます\
+\
+`name`にはElementの名前を指定します(特定のActionの時に必要)\
+\
+`parameters`には選択したElementの種類によって必要なパラメータを指定します\
+今回の`TextElement`では、`text`に表示するテキストを指定し、`onInteract`にはElementをクリックした時に実行するActionを指定しています\
+[`End`](../../reference#Action/End)はElementを全て削除して処理を終了するActionです\
+\
+他にもElementによって必要なパラメータが異なるので、[Element](../../reference#Element)を確認してください
+
+## Elementの編集
+Elementを編集することで、表示する内容を変更することができます\
+Elementの編集は[EditElement](../../reference#Action/EditElement)で行います
+
+```yaml title="edit_element.yml"
+edit_element:
+  actions:
+    - class: EditElement
+      name: "test_element"
+      edit:
+//lime-start
+        text: "Hello, World!" #テキストを変更
+//lime-end
+```
+
+### 説明
+`name`には編集するElementの名前を指定します\
+\
+`edit`には選択したElementの種類によって変更できるパラメータを指定します\
+今回の`TextElement`では、`text`に表示するテキストを変更しています

@@ -1,0 +1,42 @@
+---
+sidebar_position: 5
+---
+
+# 変数を使う
+変数を使うことで、柔軟なActionを作成することができます
+
+## 使い方
+```yaml title="action.yml"
+action:
+  actions:
+    - class: Message
+      message: ${<変数名>}
+    - class: Message
+      message: ${<変数名>:<デフォルト値>}
+```
+変数は`${<変数名>}`のように記述します\
+`${<変数名>:<デフォルト値>}`のように記述すると、変数が存在しなかった場合に右の値が使用されます
+
+変数はkey(左側の部分)以外で使用することができます\
+(クラスにも使用できたりします)
+
+## 変数の設定
+変数は[ModifyVariable](../../reference/#Action/ModifyVariable)を使うことで設定できます\
+```yaml title="action.yml"
+action:
+  actions:
+    - class: ModifyVariable
+      variable: test
+      scope: global
+      value: "Hello!"
+```
+`variable`には変数名を、`value`には値を指定します\
+`scope`には変数のスコープを指定します\
+`global`を指定すると、そのAction全てで使用可能な変数になります\
+`local`を指定すると、基本的にそのセクションの中でのみ使用可能な変数になります
+
+## デフォルトの変数
+DisplayMonitorでは、デフォルトでいくつかの変数が用意されています\
+`PrintVariables`を使うことで、現在の変数をターゲットに送信してくれます
+
+

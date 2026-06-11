@@ -1,0 +1,35 @@
+---
+sidebar_position: 7
+---
+
+# 値を計算する
+値を計算することで、より柔軟なActionを作成することができます
+```yaml title="action.yml"
+action:
+  actions:
+    - class: Message
+      message: 1 + 1
+```
+算術演算子を用いることで、計算を行うことができます\
+`1 + 1`のように記述することで、計算結果が表示されます
+
+変数を用いることもできます
+```yaml title="action.yml"
+action:
+  actions:
+    - class: Message
+      message: ${number} + 1
+```
+
+## 関数
+関数を使うことで、より便利なことができます
+```yaml title="action.yml"
+action:
+  actions:
+    - class: Message
+      message: "\"Current Value: \" + @floor(1.5)"
+```
+関数は`@`をつけることで使用できます
+文字列と数値を結合する場合には、`"`で囲んだ上で、\
+文字列とするところを`\"`で囲む必要があります\
+使える関数、算術演算子などは[こちら](https://tororo1066.github.io/display-monitor-docs/reference/#Function)で確認できます

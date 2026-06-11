@@ -1,0 +1,34 @@
+---
+sidebar_position: 1
+---
+
+# Actionを作る
+初めてのActionを作りましょう
+
+`plugins/DisplayMonitor/actions/`に`first_action.yml`を作成します\
+以下のように記入します
+```yaml title="first_action.yml"
+first_action:
+  actions:
+    - class: Message
+      message: "<red>Hello!</red>"
+```
+
+作成した後は`/dmonitor reload`で読み込んだ後に、\
+`/dmonitor runLoaded DisplayMonitor first_action`で実行します\
+メッセージが表示されるはずです！
+
+## 説明
+Actionは1つ1つのクラスで出来ています
+```yaml title="first_action.yml"
+first_action:
+  actions:
+//lime-start
+    - class: Message #1つめのクラス
+      message: "<red>Hello!</red>" #1つめのクラスの設定
+//lime-end
+//white-blue-start
+    - class: Command #2つめのクラス
+      command: "say Hello!" #2つめのクラスの設定
+//white-blue-end
+```

@@ -1,0 +1,82 @@
+---
+sidebar_position: 3
+---
+
+# GroupElement
+[GroupElement](../../reference/#Element/GroupElement)を使うことで、複数のElementをまとめて管理することができます
+
+## 使い方
+```yaml title="summon_group_element.yml"
+summon_group_element:
+  actions:
+    - class: SummonElement
+      type: "GroupElement"
+      name: "test_group_element"
+      parameters:
+        elements:
+          text:
+            type: "TextElement"
+            parameters:
+              text: "Hello!"
+              onInteract:
+                - class: End
+          item:
+            key: "item_${number}"
+            type: "ItemElement"
+            parameters:
+              item: "minecraft:stone"
+              onInteract:
+                - class: End
+```
+
+### 説明
+`SummonElement`の`parameters`に`elements`を指定することで、Elementを追加することができます\
+`elements`には追加するElementの名前を指定し、`type`には召喚するElementの種類を指定します\
+`key`を指定することで、`item`というkeyを無視して新たに`item_${number}`というkeyを作成します\
+変数を用いたいときに便利です\
+`parameters`には選択したElementの種類によって必要なパラメータを指定します
+
+## Elementの編集
+Elementを編集することで、表示する内容を変更することができます
+```yaml title="edit_group_element.yml"
+edit_group_element:
+  actions:
+    - class: EditElement
+      name: "test_group_element"
+      edit:
+        elements:
+          new_text:
+            type: "TextElement"
+            parameters:
+              text: "New Text"
+        edit:
+          text:
+            text: "Hello, World!" #テキストを変更
+          item:
+            key: "item_${number}"
+            item: "minecraft:diamond" #アイテムを変更
+```
+
+### 説明
+`EditElement`の`edit`にさらに`edit`を指定することで、Elementを編集することができます\
+`edit`には選択したElementの種類によって変更できるパラメータを指定します\
+今回の`TextElement`では、`text`に表示するテキストを変更しています\
+`ItemElement`では、`item`に表示するアイテムを変更しています\
+`key`を指定することで、`item`というkeyを無視して新たに`item_${number}`というkeyを指定することができます\
+また、`elements`を指定することで新たにElementを追加することができます
+
+## Elementの削除
+Elementを削除することで、表示する内容を変更することができます
+```yaml title="remove_group_element.yml"
+remove_group_element:
+  actions:
+    - class: EditElement
+      name: "test_group_element"
+      edit:
+        remove:
+          - text #削除するElementの名前
+```
+
+### 説明
+`EditElement`の`edit`に`remove`を指定することで、Elementを削除することができます\
+`remove`には削除するElementの名前を指定します

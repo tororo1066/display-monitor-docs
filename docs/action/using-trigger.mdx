@@ -1,0 +1,18 @@
+---
+sidebar_position: 4
+---
+
+# Triggerを使う
+Triggerを使うことで、特定の条件を満たした時にActionを実行することができます
+```yaml title="action.yml"
+action:
+  triggers:
+    - trigger: jump
+  actions:
+    - class: Message
+      message: "Jumped!"
+```
+これで、プレイヤーがジャンプした時に`Jumped!`と表示されます
+
+## 現在実装されているTrigger
+- `未実装`
