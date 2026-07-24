@@ -9,7 +9,7 @@ const ClassDetail: React.FC<Props> = ({ selectedClass }) => {
     if (!selectedClass) return <div className="detail-view">クラスを選択してください</div>;
 
     return (
-        <div className="detail-view">
+        <div className="detail-view list-scroll-lock">
             <h2 className="detail-title">{selectedClass.name}</h2>
             {selectedClass.description}
         </div>
