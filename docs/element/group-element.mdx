@@ -24,7 +24,7 @@ summon_group_element:
             key: "item_${number}"
             type: "ItemElement"
             parameters:
-              item: "minecraft:stone"
+              itemStack: "minecraft:stone"
               onInteract:
                 - class: End
 ```
@@ -54,14 +54,14 @@ edit_group_element:
             text: "Hello, World!" #テキストを変更
           item:
             key: "item_${number}"
-            item: "minecraft:diamond" #アイテムを変更
+            itemStack: "minecraft:diamond" #アイテムを変更
 ```
 
 ### 説明
 `EditElement`の`edit`にさらに`edit`を指定することで、Elementを編集することができます\
 `edit`には選択したElementの種類によって変更できるパラメータを指定します\
 今回の`TextElement`では、`text`に表示するテキストを変更しています\
-`ItemElement`では、`item`に表示するアイテムを変更しています\
+`ItemElement`では、`itemStack`に表示するアイテムを変更しています\
 `key`を指定することで、`item`というkeyを無視して新たに`item_${number}`というkeyを指定することができます\
 また、`elements`を指定することで新たにElementを追加することができます
 
